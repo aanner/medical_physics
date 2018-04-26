@@ -1,3 +1,5 @@
+%% Initial plot
+
 %plotATM('r01_edfm')
 Name = 'r01_edfm';
 infoName = strcat(Name, '.info');
@@ -33,6 +35,20 @@ legend(labels);
 xlabel('Time (sec)');
 % grid on
 
-%%
+%% Create CSV
+clc;
+cHeader = {'ab' 'bcd' 'cdef' 'dav'}; %dummy header
+textHeader = 'Time (s),';
+for i=1:length(labels)
+    textHeader = [textHeader labels{i} ','];
+end
+textHeader = textHeader(1:end-1);
+fileID = fopen('r01_edfm.csv','w');
+fprintf(fileID,'%s\n',textHeader);
+fclose(fileID);
+data = [x', val'];
+dlmwrite('r01_edfm.csv', data, 'delimiter', ',', '-append')
 
-dlmwrite('r01_edfm.csv', [x', val'], 'newline', 'pc', 'delimiter', ',')
+%%
+val_cwt = cwt(data(:,3))
+plot(val_cwt)
