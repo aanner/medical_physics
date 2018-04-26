@@ -50,5 +50,4 @@ data = [x', val'];
 dlmwrite('r01_edfm.csv', data, 'delimiter', ',', '-append')
 
 %%
-val_cwt = cwt(data(:,3))
-plot(val_cwt)
+cwt(data(:,3));
