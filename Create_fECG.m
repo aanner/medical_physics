@@ -50,4 +50,5 @@ data = [x', val'];
 dlmwrite('r01_edfm.csv', data, 'delimiter', ',', '-append')
 
 %%
-cwt(data(:,3));
+Fs=1000;
+cwt(data(:,3), Fs);
