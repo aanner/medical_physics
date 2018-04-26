@@ -3,7 +3,7 @@ Name = 'r01_edfm';
 infoName = strcat(Name, '.info');
 matName = strcat(Name, '.mat');
 load(matName);
-val = val(1:end-1, 1:end); % remove "annotation curve"
+val = val(1:end-1, 1:end); % remove "annotation" curve
 fid = fopen(infoName, 'rt');
 fgetl(fid);
 fgetl(fid);
@@ -25,7 +25,6 @@ end
 
 x = (1:size(val, 2)) * interval;
 plot(x', val');
-
 for i = 1:length(signal)
     labels{i} = strcat(signal{i}, ' (', units{i}, ')'); 
 end
@@ -33,3 +32,7 @@ end
 legend(labels);
 xlabel('Time (sec)');
 % grid on
+
+%%
+
+dlmwrite('r01_edfm.csv', [x', val'], 'newline', 'pc', 'delimiter', ',')
