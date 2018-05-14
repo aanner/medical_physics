@@ -51,4 +51,24 @@ dlmwrite('r01_edfm.csv', data, 'delimiter', ',', '-append')
 
 %%
 Fs=1000;
-cwt(data(:,3), Fs);
+V = data(1:30000,3);
+V_fft = fft(V);
+freq = linspace(0, Fs, length(V));
+
+plot(freq, abs(V_fft))
+xlim([0,50])
+%%
+V = zeros(size(data(1:30000,1)));
+for i=1:4
+    V=V+data(1:30000,i+2);
+    %plot(data(1:30000,i+2))
+    %hold on
+end
+plot(V/3)
+%%
+[autocor,lags] = xcorr(data(1:10000,3));
+plot(lags*1/Fs, autocor)
+%xlim([0.5, 3])
+%cwt(autocor)
+%%
+cwt(V, 'bump', Fs);
