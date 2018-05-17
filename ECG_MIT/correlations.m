@@ -1,6 +1,6 @@
 
 data = csvread('data/r01_edfm.csv', 1);
-data = data(1:3000, :);
+data = data(:, :);
 
 %Measured in sec
 time = data(:, 1);
@@ -73,6 +73,7 @@ for i=2:N
 end
 %% Principal component analysis
 X = [abd_1, abd_2, abd_3, abd_4];
+%%
 sigma = X*transpose(X);
 [V, D] = eigs(sigma);
 disp(D)
@@ -88,7 +89,7 @@ plot(V(:,4))
 %%
 [coeff,score,latent] = pca(X);
 %% Independent component analysis
-n_sources = 2;
+n_sources = 3;
 Mld = rica(X, n_sources);
 
 source_signals = transform(Mld, X);
@@ -106,10 +107,15 @@ plot(corr_1)
 hold on
 plot(corr_2)
 %% Wavelet transform of independent components
-figure
-cwt(source_signals(:,1), 'morse', fs);
-figure
-cwt(source_signals(:,2),'morse', fs);
+for j=1:1
+
+    for i=1:n_sources
+        figure
+        cwt(source_signals(j*3000:(j+1)*3000,i), 'morse', fs);
+    end
+    pause
+    close all
+end
 %%
 subplot(421)
 
