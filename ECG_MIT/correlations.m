@@ -1,5 +1,5 @@
 
-data = csvread('data/r01_edfm.csv', 1);
+data = csvread('data_rc_filtered/r01_edfm.csv', 1);
 data = data(1:3000, :);
 
 %Measured in sec
@@ -68,11 +68,17 @@ xlim([30, 200])
 
 %%
 for i=2:N
+    subplot(311)
     plot(abd_1(1:i), abd_3(1:i))
+    subplot(312)
+    plot(time(1:i), abd_1(1:i))
+    subplot(313)
+    plot(time(1:i), abd_3(1:i))
     pause(1/fs)
 end
 %% Principal component analysis
-X = [abd_1, abd_2, abd_3, abd_4];
+X = [abd_1, abd_2];
+%%
 sigma = X*transpose(X);
 [V, D] = eigs(sigma);
 disp(D)
@@ -106,14 +112,28 @@ plot(corr_1)
 hold on
 plot(corr_2)
 %% Wavelet transform of independent components
-figure
-cwt(source_signals(:,1), 'morse', fs);
-figure
-cwt(source_signals(:,2),'morse', fs);
+for i=1:n_sources
+    figure
+    cwt(source_signals(:,i), 'morse', fs);
+end
+pause
+close all
+
 %%
 subplot(421)
 
 subplot(422)
 cwt(source_signals(:,2))
-
-
+%% Wavelet transform of individual signals
+fig_abd_1 = figure
+cwt(abd_1, 'morse', fs)
+saveas(fig_abd_1, 'figures/abd_1_cwt.png')
+fig_abd_2 = figure
+cwt(abd_2, 'morse', fs)
+saveas(fig_abd_1, 'figures/abd_2_cwt.png')
+fig_abd_3 = figure
+cwt(abd_3, 'morse', fs)
+saveas(fig_abd_3, 'figures/abd_3_cwt.png')
+fig_abd_4 = figure
+cwt(abd_4, 'morse', fs)
+saveas(fig_abd_4, 'figures/abd_4_cwt.png')
