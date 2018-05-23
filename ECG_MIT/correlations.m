@@ -34,7 +34,7 @@ grid minor
 title('Abdominal 2')
 xlabel('Time [s]')
 ylabel('Voltage [muV]')
-saveas(fig_abd_1, 'figures/abd_2.png')
+saveas(fig_abd_2, 'figures/abd_2.png')
 
 fig_abd_3 = figure('position', [100, 100, 800, 200])
 plot(time, abd_3)
@@ -44,7 +44,7 @@ grid minor
 title('Abdominal 3')
 xlabel('Time [s]')
 ylabel('Voltage [muV]')
-saveas(fig_abd_1, 'figures/abd_3.png')
+saveas(fig_abd_3, 'figures/abd_3.png')
 
 fig_abd_4 = figure('position', [100, 100, 800, 200])
 plot(time, abd_4)
@@ -54,7 +54,7 @@ grid minor
 title('Abdominal 4')
 xlabel('Time [s]')
 ylabel('Voltage [muV]')
-saveas(fig_abd_1, 'figures/abd_4.png')
+saveas(fig_abd_4, 'figures/abd_4.png')
 
 %% Autocorrelation function
 [abd_11_cor, delay] = xcorr(abd_1);
