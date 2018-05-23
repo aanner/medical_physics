@@ -15,6 +15,47 @@ dt = time(2)-time(1);
 fs = 1/dt;
 conv_Hz_to_bpm = 60;
 N = length(time);
+
+fig_abd_1 = figure('position', [100, 100, 800, 200])
+plot(time, abd_1)
+xlim([time(1), time(end)])
+grid on
+grid minor
+title('Abdominal 1')
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_abd_1, 'figures/abd_1.png')
+
+fig_abd_2 = figure('position', [100, 100, 800, 200])
+plot(time, abd_2)
+xlim([time(1), time(end)])
+grid on
+grid minor
+title('Abdominal 2')
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_abd_1, 'figures/abd_2.png')
+
+fig_abd_3 = figure('position', [100, 100, 800, 200])
+plot(time, abd_3)
+xlim([time(1), time(end)])
+grid on
+grid minor
+title('Abdominal 3')
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_abd_1, 'figures/abd_3.png')
+
+fig_abd_4 = figure('position', [100, 100, 800, 200])
+plot(time, abd_4)
+xlim([time(1), time(end)])
+grid on
+grid minor
+title('Abdominal 4')
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_abd_1, 'figures/abd_4.png')
+
 %% Autocorrelation function
 [abd_11_cor, delay] = xcorr(abd_1);
 [abd_22_cor, ~] = xcorr(abd_2);
@@ -76,6 +117,8 @@ for i=2:N
     plot(time(1:i), abd_3(1:i))
     pause(1/fs)
 end
+
+
 %% Principal component analysis
 X = [abd_1, abd_2, abd_3, abd_4];
 %%
@@ -95,15 +138,31 @@ plot(V(:,4))
 [coeff,score,latent] = pca(X);
 %% Independent component analysis
 n_sources = 2;
-Mld = rica(X[2:, n_sources);
+Mld = rica(X, n_sources);
 
-source_signals = transform(Mld, X[2:]);
-for i=1:n_sources
-    subplot(n_sources + 1,1,i)
-    plot(time, source_signals(:,i))
-end
-subplot(n_sources + 1,1,n_sources+1)
-plot(time, (abd_1+abd_2+abd_3+abd_4)/4)
+source_signals = transform(Mld, X);
+
+fig_maternal_RICA = figure('position', [100, 100, 600, 200])
+plot(time, source_signals(:,1))
+xlim([time(1), time(end)])
+grid on
+grid minor
+%title('Maternal source signal', 'FontSize', 14)
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_maternal_RICA, 'figures/maternal_RICA.png')
+
+fig_foetal_RICA = figure('position', [100, 100, 600, 200])
+plot(time, source_signals(:,2))
+xlim([time(1), time(end)])
+grid on
+grid minor
+%title('Foetal source signal with maternal residue', 'FontSize', 14)
+xlabel('Time [s]')
+ylabel('Voltage [muV]')
+saveas(fig_foetal_RICA, 'figures/foetal_RICA.png')
+%%
+plot(source_signals(1:1500,1), source_signals(1:1500,2))
 
 %% Autocorrelation of independent components
 corr_1 = xcorr(source_signals(:,1));
@@ -112,12 +171,13 @@ plot(corr_1)
 hold on
 plot(corr_2)
 %% Wavelet transform of independent components
-for i=1:n_sources
-    figure
-    cwt(source_signals(:,i), 'morse', fs);
-end
-pause
-close all
+fig_maternal_RICA_cwt = figure('position', [100, 100, 600, 300])
+cwt(source_signals(:,1), 'morse', fs);
+saveas(fig_maternal_RICA_cwt, 'figures/maternal_RICA_cwt.png')
+fig_foetal_RICA_cwt = figure('position', [100, 100, 600, 300])
+cwt(source_signals(:,2), 'morse', fs);
+saveas(fig_foetal_RICA_cwt, 'figures/foetal_RICA_cwt.png')
+
 
 %%
 subplot(421)
@@ -137,3 +197,7 @@ saveas(fig_abd_3, 'figures/abd_3_cwt.png')
 fig_abd_4 = figure
 cwt(abd_4, 'morse', fs)
 saveas(fig_abd_4, 'figures/abd_4_cwt.png')
+
+%%
+plot3d(abd_1, abd_3, abd_4)
+
